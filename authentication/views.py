@@ -9,18 +9,13 @@ class SignupView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            if serializer.validated_data['admin']:
-                user = serializer.save(is_staff=True)
-                return Response({
-                    'message': 'admin user created successfully',
-                    'data': serializer.data,
-                }, status=status.HTTP_201_CREATED)
-            else:
-                serializer.save()
-                return Response({
-                    'message': 'User created successfully',
-                    'data': serializer.data,
-                }, status=status.HTTP_201_CREATED)
+            is_admin = serializer.validated_data.get('admin', False)
+            user = serializer.save(is_staff=is_admin)
+            message = 'admin user created successfully' if is_admin else 'User created successfully'
+            return Response({
+                'message': message,
+                'data': serializer.data,
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class LoginView(APIView):
