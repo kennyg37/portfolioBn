@@ -10,7 +10,7 @@ class Blog(models.Model):
     likes = models.PositiveIntegerField(default=0)
     commentCount = models.PositiveIntegerField(default=0)
     comments = models.TextField(default='')
-    writer = models.ForeignKey('authentication.MyUser', on_delete=models.CASCADE)
+    author = models.ForeignKey('authentication.MyUser', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
