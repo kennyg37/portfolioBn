@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -39,12 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
     'authentication',
     'blog',
-    'UserProfile'
+    'UserProfile',
     'storages',
 ]
 
@@ -84,7 +86,10 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
 
 # Database
@@ -105,7 +110,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage',
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID'),
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
-AWS_REGION = os.getenv('AWS_REGION')
+AWS_S3_REGION_NAME = os.getenv('AWS_REGION')
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_BUCKET_NAME}.s3.amazonaws.com'

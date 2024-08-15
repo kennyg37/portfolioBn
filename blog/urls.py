@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import BlogViewSet
+from .views import BlogListView, BlogDetailView
 
 urlpatterns = [
-    path('data/', BlogViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('data/', BlogListView.as_view(), name='blog-list'),
+    path('data/<int:pk>/', BlogDetailView.as_view(), name='blog-detail'),
 ]
