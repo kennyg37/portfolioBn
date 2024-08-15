@@ -6,14 +6,35 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Blog
 from .serializers import BlogSerializer
+import boto3
+from django.conf import settings
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class BlogViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
-    
+    parser_classes = [MultiPartParser, FormParser]
+
+    def upload_image_to_s3(self, image):
+        s3 = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                          aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                          region_name=settings.AWS_S3_REGION_NAME)
+
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+        file_name = image.name
+        s3.upload_fileobj(image, bucket_name, file_name, ExtraArgs={'ContentType': image.content_type})
+
+        image_url = f"https://{bucket_name}.s3.amazonaws.com/{file_name}"
+        return image_url
+
     def create(self, request, *args, **kwargs):
+        image = request.data.get('image')
+        if image:
+            image_url = self.upload_image_to_s3(image)
+            request.data['image'] = image_url
+
         serializer = BlogSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(writer=request.user)

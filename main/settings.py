@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'authentication',
     'blog',
+    'UserProfile'
     'storages',
 ]
 
@@ -107,6 +108,7 @@ AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 AWS_REGION = os.getenv('AWS_REGION')
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_BUCKET_NAME}.s3.amazonaws.com'
 
 
 # Password validation
