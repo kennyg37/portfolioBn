@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from blog.imageUpload import UploadImageToS3Mixin
-from .models import Blog
-from .serializers import BlogSerializer
+from ..models import Blog
+from ..serializers import BlogSerializer
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
