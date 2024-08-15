@@ -2,21 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from blog.imageUpload import UploadImageToS3Mixin
 from .models import Blog
 from .serializers import BlogSerializer
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
+import boto3
 from rest_framework.parsers import MultiPartParser, FormParser
 
-
-class UploadImageToS3Mixin:
-    def upload_image_to_s3(self, image):
-        file_name = image.name
-        file_content = ContentFile(image.read())
-        image_url = default_storage.save(file_name, file_content)
-        image_url = default_storage.url(file_name)
-        return image_url
 
 class BlogListView(APIView, UploadImageToS3Mixin):
     permission_classes = [IsAuthenticated]
@@ -86,3 +80,9 @@ class BlogDetailView(APIView, UploadImageToS3Mixin):
         
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class BlogOperationsView(APIView):
+    parmission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    

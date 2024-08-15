@@ -9,7 +9,7 @@ python-dotenv = "*"
 psycopg2-binary = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
-django-storages = {extras = ["boto3"], version = "*"}
+django-storages = "*"
 
 [dev-packages]
 
