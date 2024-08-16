@@ -1,1 +1,1 @@
-Portfolio backend using Django
+Portfolio backend using Django, DRF, DORM
