@@ -10,10 +10,7 @@ class UploadImageToS3Mixin:
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
             region_name=settings.AWS_S3_REGION_NAME
         )
-        if hasattr(image, 'name'):
-            file_name = f"{folder}/{image.name}"
-        else:
-            file_name = 'image.jpg'
+        file_name = "f{folder}/{image.name}"
         s3.upload_fileobj(image, settings.AWS_STORAGE_BUCKET_NAME, file_name, ExtraArgs={'ContentType': image.content_type})
 
         image_url = f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/{file_name}"
